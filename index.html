@@ -840,19 +840,18 @@ let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>placeCa
 window.__t={playV};buildTower();say("Welcome to Thakral Tower. I'm NOVA. We start on the ground floor and take the lift up, one idea per floor. Hover a floor to preview it.");
 })();
 </script>
-<!-- ===== NOVA live agent: chat + voice, backed by the Microsoft Foundry agent. Injected before </body>. ===== -->
+<!-- ===== NOVA live agent: chat + one-on-one voice call, backed by the Microsoft Foundry agent. Injected before </body>. ===== -->
 <style>
-/* Ask NOVA drawer: sits above every layer (slides 40, video 55, live 60, toast 70) so it works from any floor. */
+/* Ask NOVA drawer and call screen sit above every layer (slides 40, video 55, live 60, toast 70) so they work from any floor. */
 .nv-launch{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:10px;background:var(--grad);color:#fff;font-size:13px;font-weight:700;box-shadow:0 10px 26px -12px rgba(232,111,160,.9)}
+.nv-launch.alt{background:linear-gradient(95deg,#1F8A5B,#2BB673);box-shadow:0 10px 26px -12px rgba(43,182,115,.8)}
 .nv-launch i{width:8px;height:8px;border-radius:50%;background:#7CF0B0;box-shadow:0 0 0 3px rgba(124,240,176,.25);animation:nvp 1.6s infinite}
 @keyframes nvp{50%{box-shadow:0 0 0 6px rgba(124,240,176,0)}}
 #nv{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);z-index:80;display:flex;flex-direction:column;background:linear-gradient(180deg,#1B1538,#120E28);border-left:1px solid var(--stage-line);box-shadow:-30px 0 80px -20px rgba(0,0,0,.6);color:var(--stage-fg);transform:translateX(105%);transition:transform .35s cubic-bezier(.3,.7,.2,1)}
 #nv.open{transform:none}
 #nv .hd{display:flex;align-items:center;gap:12px;padding:16px 16px 14px;border-bottom:1px solid var(--stage-line)}
-#nv .av{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.06);display:grid;place-items:center;overflow:hidden;flex:none;position:relative}
+#nv .av{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.06);display:grid;place-items:center;overflow:hidden;flex:none}
 #nv .av img{width:120%;margin-top:18%}
-#nv .av.talk{box-shadow:0 0 0 3px rgba(232,111,160,.55);animation:nvt .5s infinite alternate}
-@keyframes nvt{to{box-shadow:0 0 0 6px rgba(155,107,224,.35)}}
 #nv .ttl{flex:1;min-width:0}
 #nv .ttl b{display:block;font-family:var(--f-display);font-size:19px;font-weight:600}
 #nv .ttl span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--stage-muted)}
@@ -865,163 +864,260 @@ window.__t={playV};buildTower();say("Welcome to Thakral Tower. I'm NOVA. We star
 #nv .m.a p{margin:0 0 8px}#nv .m.a p:last-child{margin:0}
 #nv .m.a ul,#nv .m.a ol{margin:4px 0 8px;padding-left:20px}
 #nv .m.a a{color:var(--sky)}
+#nv .m.a .tw{overflow-x:auto;margin:6px 0 10px}
+#nv .m.a table{border-collapse:collapse;font-size:13px;min-width:100%}
+#nv .m.a th,#nv .m.a td{padding:6px 8px;border-bottom:1px solid var(--stage-line);text-align:left;vertical-align:top}
+#nv .m.a th{color:var(--stage-muted);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+#nv .m.v::before{content:"📞 ";opacity:.8}
 #nv .m.sys{align-self:center;max-width:100%;font-size:12.5px;color:var(--stage-muted);background:none;text-align:center;padding:4px 8px}
 #nv .m.err{align-self:center;background:var(--bad-bg);color:var(--bad);font-size:13px}
-#nv .dots{display:inline-flex;gap:5px}#nv .dots i{width:7px;height:7px;border-radius:50%;background:var(--stage-muted);animation:nvd 1s infinite}
-#nv .dots i:nth-child(2){animation-delay:.15s}#nv .dots i:nth-child(3){animation-delay:.3s}
+#nv .nv-dots{display:inline-flex;gap:5px}#nv .nv-dots i{width:7px;height:7px;border-radius:50%;background:var(--stage-muted);animation:nvd 1s infinite}
+#nv .nv-dots i:nth-child(2){animation-delay:.15s}#nv .nv-dots i:nth-child(3){animation-delay:.3s}
 @keyframes nvd{50%{opacity:.25;transform:translateY(-3px)}}
-#nv .chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px}
-#nv .chips button{font-size:12.5px;padding:7px 11px;border-radius:999px;border:1px solid var(--stage-line);background:rgba(255,255,255,.04);text-align:left}
-#nv .chips button:hover{border-color:var(--pink)}
+#nv .nv-chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px}
+#nv .nv-chips button{font-size:12.5px;padding:7px 11px;border-radius:999px;border:1px solid var(--stage-line);background:rgba(255,255,255,.04);text-align:left}
+#nv .nv-chips button:hover{border-color:var(--pink)}
 #nv .gate{margin:auto 16px;padding:22px;border-radius:16px;border:1px solid var(--stage-line);background:rgba(255,255,255,.04);text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
 #nv .gate p{margin:0;color:var(--stage-muted);font-size:14px;line-height:1.5}
 #nv .pri{height:44px;padding:0 20px;border-radius:12px;background:var(--grad);color:#fff;font-weight:700}
-#nv .bar{display:flex;align-items:flex-end;gap:8px;padding:12px 16px 10px;border-top:1px solid var(--stage-line)}
+#nv .nv-bar{display:flex;align-items:flex-end;gap:8px;padding:12px 16px 10px;border-top:1px solid var(--stage-line)}
 #nv textarea{flex:1;resize:none;max-height:120px;min-height:44px;padding:11px 13px;border-radius:12px;border:1px solid var(--stage-line);background:rgba(255,255,255,.05);color:var(--stage-fg);font:inherit;font-size:14.5px;line-height:1.4}
 #nv textarea:focus{outline:none;border-color:var(--purple)}
 #nv .rb{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;border:1px solid var(--stage-line);background:rgba(255,255,255,.05);font-size:18px}
 #nv .rb.send{background:var(--grad);border:0;color:#fff}
 #nv .rb.on{background:var(--bad);border-color:var(--bad);color:#fff;animation:nvp2 1.2s infinite}
 @keyframes nvp2{50%{box-shadow:0 0 0 6px rgba(196,61,85,.25)}}
-#nv .call{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 16px 10px;height:44px;border-radius:12px;border:1px solid var(--stage-line);background:rgba(255,255,255,.04);font-weight:700;font-size:14px}
-#nv .call.on{background:linear-gradient(95deg,#1F8A5B,#2BB673);border-color:transparent;color:#fff}
+#nv .call{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 16px 10px;height:46px;border-radius:12px;background:linear-gradient(95deg,#1F8A5B,#2BB673);color:#fff;font-weight:700;font-size:14.5px}
 #nv .call em{font-style:normal;font-weight:500;opacity:.85;font-size:12.5px}
-#nv .ft{padding:0 16px 14px;font-size:11px;color:var(--stage-muted);display:flex;gap:8px;align-items:center}
-#nv .ft .sp{flex:1}#nv .ft button{text-decoration:underline;font-size:11px}
+#nv .ft{padding:0 16px 14px;font-size:11px;color:var(--stage-muted);display:flex;gap:10px;align-items:center}
+#nv .ft .nv-sp{flex:1}#nv .ft button{text-decoration:underline;font-size:11px}
+
+/* One-on-one call screen */
+#nvc{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:24px 16px;color:var(--stage-fg);
+  background:radial-gradient(700px 520px at 50% 38%,rgba(155,107,224,.32),transparent 65%),radial-gradient(600px 400px at 50% 100%,rgba(247,148,62,.16),transparent 60%),#0D0A1F}
+#nvc .nv-tag{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--stage-muted)}
+#nvc .orb{position:relative;width:min(300px,62vw);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;cursor:pointer}
+#nvc .orb::before{content:"";position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 0deg,var(--orange),var(--pink),var(--purple),var(--sky),var(--orange));filter:blur(18px);opacity:.35;transition:opacity .4s}
+#nvc .orb::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2A2150,#151030 70%);border:1px solid rgba(255,255,255,.12)}
+#nvc .orb img{position:relative;z-index:1;width:72%;margin-top:14%}
+#nvc .ring{position:absolute;inset:-6px;border-radius:50%;border:2px solid transparent;z-index:2;pointer-events:none}
+#nvc[data-s="listening"] .orb::before{opacity:.55;animation:nvbreath 2.4s ease-in-out infinite}
+#nvc[data-s="listening"] .ring{border-color:rgba(124,240,176,.7);animation:nvring 1.8s ease-out infinite}
+#nvc[data-s="thinking"] .orb::before{opacity:.7;animation:nvspin 1.6s linear infinite}
+#nvc[data-s="speaking"] .orb::before{opacity:.9;animation:nvbeat .45s ease-in-out infinite alternate}
+#nvc[data-s="speaking"] .orb img{animation:nvbob .45s ease-in-out infinite alternate}
+@keyframes nvbreath{50%{transform:scale(1.06)}}
+@keyframes nvring{from{transform:scale(1);opacity:1}to{transform:scale(1.18);opacity:0}}
+@keyframes nvspin{to{transform:rotate(360deg)}}
+@keyframes nvbeat{to{transform:scale(1.1);opacity:1}}
+@keyframes nvbob{to{transform:translateY(-4px)}}
+#nvc .state{font-family:var(--f-display);font-size:30px;font-weight:600;min-height:38px}
+#nvc .nv-cap{max-width:min(720px,100%);min-height:84px;text-align:center;font-size:18px;line-height:1.5;color:#E6E0F7}
+#nvc .nv-cap .nv-you{color:var(--stage-muted);font-size:15px;display:block;margin-bottom:6px}
+#nvc .ctl{display:flex;align-items:center;gap:14px;padding:10px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--stage-line)}
+#nvc .ctl .nv-t{font-family:var(--f-mono);font-size:14px;min-width:54px;text-align:center;font-variant-numeric:tabular-nums}
+#nvc .cb{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:20px;border:1px solid var(--stage-line);background:rgba(255,255,255,.06)}
+#nvc .cb.off{background:#fff;color:var(--ink)}
+#nvc .end{height:52px;padding:0 26px;border-radius:999px;background:var(--bad);color:#fff;font-weight:700;font-size:15px}
+#nvc .hint{font-size:12.5px;color:var(--stage-muted)}
 </style>
 
 <aside id="nv" aria-label="Ask NOVA, live AI agent" aria-hidden="true">
   <div class="hd">
-    <div class="av" id="nvav"><img id="nvimg" alt=""></div>
+    <div class="av"><img class="nvimg" alt=""></div>
     <div class="ttl"><b>Ask NOVA</b><span>Live agent · Microsoft Foundry</span></div>
     <button class="ib" id="nvnew" title="New conversation">↺</button>
     <button class="ib" id="nvx" title="Close (Esc)" aria-label="Close">✕</button>
   </div>
   <div class="log" id="nvlog" aria-live="polite"></div>
-  <div class="chips" id="nvchips"></div>
-  <button class="call" id="nvcall" hidden>📞 Start voice call <em>hands-free</em></button>
-  <div class="bar" id="nvbar" hidden>
+  <div class="nv-chips" id="nvchips"></div>
+  <button class="call" id="nvcall" hidden>📞 Voice call with NOVA <em>talk one-on-one</em></button>
+  <div class="nv-bar" id="nvbar" hidden>
     <textarea id="nvin" rows="1" placeholder="Ask NOVA anything…"></textarea>
-    <button class="rb" id="nvmic" title="Hold a quick voice question">🎙️</button>
+    <button class="rb" id="nvmic" title="Dictate a question">🎙️</button>
     <button class="rb send" id="nvsend" title="Send (Enter)">↑</button>
   </div>
-  <div class="ft"><span>Live AI · decision support, not advice · may be wrong</span><span class="sp"></span><button id="nvmute" title="Read replies aloud">🔊 Voice on</button><button id="nvout" hidden>Sign out</button></div>
+  <div class="ft"><span>Live AI · decision support, not advice · may be wrong</span><span class="nv-sp"></span><button id="nvread" title="Read chat replies aloud"></button><button id="nvout" hidden>Sign out</button></div>
 </aside>
+
+<div id="nvc" hidden role="dialog" aria-modal="true" aria-label="Voice call with NOVA" data-s="idle">
+  <span class="nv-tag">Live voice call · NOVA · Microsoft Foundry agent</span>
+  <div class="orb" id="nvorb" title="Tap to interrupt or talk"><div class="ring"></div><img class="nvimg" alt="NOVA"></div>
+  <div class="state" id="nvstate">Connecting…</div>
+  <div class="nv-cap" id="nvcap"></div>
+  <div class="ctl"><button class="cb" id="nvcmic" title="Mute microphone">🎙️</button><span class="nv-t" id="nvtime">00:00</span><button class="end" id="nvend">End call</button></div>
+  <span class="hint">Tap NOVA to interrupt · Esc to end · Live AI, may be wrong</span>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@4.13.0/lib/msal-browser.min.js"></script>
 <script>
 (()=>{
-/* ---- Config: the Foundry agent this page talks to ---- */
+/* ---- Config: the Foundry agent and Azure voice this page uses ---- */
 const CFG={
   endpoint:'https://copilotfoundary.services.ai.azure.com/api/projects/proj-copilot/agents/Thakral-AI/endpoint/protocols/openai/responses?api-version=v1',
+  tts:'https://copilotfoundary.cognitiveservices.azure.com/tts/cognitiveservices/v1',
+  voice:'en-US-AvaMultilingualNeural',
   clientId:'1533e439-4b7f-46fb-94d7-6bd0d78d8b5e',
   tenant:'2a186972-010c-4358-87ef-0b4143ac3619',
   scopes:['https://ml.azure.com/user_impersonation'],
+  speechScopes:['https://cognitiveservices.azure.com/user_impersonation'],
+  voiceNote:'(Voice call with NOVA, Thakral Group\'s AI guide. Reply like a friendly phone conversation in two or three short spoken sentences. No tables, lists, links, markdown or emojis.)\n',
   chips:['What can you help Thakral with?','How is Bose positioned against Sony and Apple in Asia?','Three ways to protect margin if USD strengthens?','What drives sales on 11.11 and 12.12?']
 };
-const $=s=>document.querySelector(s),panel=$('#nv'),log=$('#nvlog'),inp=$('#nvin');
-const st={prev:null,busy:false,voice:true,call:false,listening:false,account:null};
-try{st.voice=localStorage.getItem('nv-voice')!=='off'}catch(e){}
+const $=s=>document.querySelector(s),panel=$('#nv'),log=$('#nvlog'),inp=$('#nvin'),call=$('#nvc');
+const st={prev:null,busy:false,read:false,account:null,inCall:false,micOn:true,listening:false};
+try{st.read=localStorage.getItem('nv-read')==='on'}catch(e){}
 
-/* ---- Launchers: top bar, slide chrome, NOVA avatar, key A ---- */
-const mk=()=>{const b=document.createElement('button');b.className='nv-launch';b.innerHTML='<i></i>Ask NOVA';b.onclick=openP;return b};
-$('#fs')&&$('#fs').before(mk());
-const ch=$('#nbtn');if(ch){const b=document.createElement('button');b.className='cbtn';b.textContent='💬 Ask NOVA';b.onclick=openP;ch.after(b)}
+/* ---- Launchers: top bar, slide chrome, NOVA avatar, keys A (chat) and C (call) ---- */
+const mk=(cls,html,fn)=>{const b=document.createElement('button');b.className=cls;b.innerHTML=html;b.onclick=fn;return b};
+if($('#fs')){$('#fs').before(mk('nv-launch','<i></i>Ask NOVA',openP));$('#fs').before(mk('nv-launch alt','📞 Call NOVA',startCall))}
+$('#nbtn')&&$('#nbtn').after(mk('cbtn','💬 Ask NOVA',openP));
 $('#nova')&&($('#nova').onclick=openP);
-const src=document.querySelector('#nova img.o');if(src)$('#nvimg').src=src.src;
-addEventListener('keydown',e=>{if(panel.classList.contains('open'))return;const t=e.target;if(t&&/INPUT|TEXTAREA/.test(t.tagName))return;
-  if((e.key==='a'||e.key==='A')&&!e.metaKey&&!e.ctrlKey&&$('#vid').hidden&&$('#live').hidden){e.preventDefault();openP()}});
-/* Keys typed in the panel must not drive the Tower (F, N, arrows). */
+const src=document.querySelector('#nova img.o');if(src)document.querySelectorAll('.nvimg').forEach(i=>i.src=src.src);
+addEventListener('keydown',e=>{if(panel.classList.contains('open')||!call.hidden)return;const t=e.target;if(t&&/INPUT|TEXTAREA/.test(t.tagName))return;
+  if(e.metaKey||e.ctrlKey||!$('#vid').hidden||!$('#live').hidden)return;
+  if(e.key==='a'||e.key==='A'){e.preventDefault();openP()}else if(e.key==='c'||e.key==='C'){e.preventDefault();startCall()}});
+/* Keys typed in NOVA must not drive the Tower (F, N, arrows). */
 panel.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape')closeP()});
+call.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape')endCall()});
 
 function openP(){panel.classList.add('open');panel.setAttribute('aria-hidden','false');boot();setTimeout(()=>{if(!$('#nvbar').hidden)inp.focus()},300)}
-function closeP(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');stopCall();speechSynthesis&&speechSynthesis.cancel()}
+function closeP(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');hush()}
 $('#nvx').onclick=closeP;
 
-/* ---- Sign-in (Entra ID). Only people with access to the Foundry project can chat. ---- */
-let pca,booted=false;
-async function boot(){if(booted)return;booted=true;
-  if(location.protocol==='file:'){gate('This offline copy can’t reach the live agent. Open the hosted link to chat with NOVA.',null);return}
+/* ---- Sign-in (Entra ID). Only people with access to the Foundry project can talk to NOVA. ---- */
+let pca,booting=null;
+function boot(){return booting||(booting=(async()=>{
+  if(location.protocol==='file:'){gate('This offline copy can’t reach the live agent. Open the hosted link to talk to NOVA.',null);return}
   if(!window.msal){gate('Sign-in library failed to load. Check the internet connection and refresh.',null);return}
   pca=new msal.PublicClientApplication({auth:{clientId:CFG.clientId,authority:'https://login.microsoftonline.com/'+CFG.tenant,redirectUri:location.origin+location.pathname},cache:{cacheLocation:'localStorage'}});
   await pca.initialize();
   st.account=pca.getAllAccounts()[0]||null;
-  st.account?ready():gate('Sign in with your Microsoft work account to talk to the live Thakral agent.',signIn)}
+  st.account?ready():gate('Sign in with your Microsoft work account to talk to the live Thakral agent.',signIn)})())}
 function gate(msg,fn){log.innerHTML='';$('#nvbar').hidden=$('#nvcall').hidden=true;$('#nvchips').innerHTML='';
   const g=document.createElement('div');g.className='gate';g.innerHTML='<p></p>';g.querySelector('p').textContent=msg;
   if(fn){const b=document.createElement('button');b.className='pri';b.textContent='Sign in with Microsoft';b.onclick=fn;g.append(b)}log.append(g)}
-async function signIn(){try{const r=await pca.loginPopup({scopes:CFG.scopes,prompt:'select_account'});st.account=r.account;ready()}catch(e){if(e.errorCode!=='user_cancelled')sys('Sign-in failed: '+(e.errorMessage||e.message),'err')}}
-async function token(){const req={scopes:CFG.scopes,account:st.account};
+async function signIn(){try{const r=await pca.loginPopup({scopes:CFG.scopes,extraScopesToConsent:CFG.speechScopes,prompt:'select_account'});st.account=r.account;ready()}
+  catch(e){if(e.errorCode!=='user_cancelled')sys('Sign-in failed: '+(e.errorMessage||e.message),'err')}}
+async function token(scopes){const req={scopes,account:st.account};
   try{return (await pca.acquireTokenSilent(req)).accessToken}catch(e){return (await pca.acquireTokenPopup(req)).accessToken}}
-$('#nvout').onclick=async()=>{const a=st.account;st.account=null;st.prev=null;booted=false;await pca.logoutPopup({account:a}).catch(()=>{});boot()};
+$('#nvout').onclick=async()=>{const a=st.account;st.account=null;st.prev=null;booting=null;await pca.logoutPopup({account:a}).catch(()=>{});boot()};
 
-function ready(){log.innerHTML='';$('#nvbar').hidden=false;$('#nvcall').hidden=!SR;$('#nvout').hidden=false;$('#nvmic').hidden=!SR;
-  add('a',"Hi, I'm NOVA, the live AI agent behind this tower. Ask me anything by typing, tap 🎙️ for a quick voice question, or start a voice call to talk hands-free.");
-  chips();inp.focus()}
+function ready(){log.innerHTML='';$('#nvbar').hidden=false;$('#nvcall').hidden=false;$('#nvout').hidden=false;$('#nvmic').hidden=!SR;
+  add('a',"Hi, I'm NOVA, the live AI agent behind this tower. Type a question, or start a voice call to talk with me one-on-one.");chips()}
 function chips(){const c=$('#nvchips');c.innerHTML='';CFG.chips.forEach(t=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>send(t);c.append(b)})}
-$('#nvnew').onclick=()=>{st.prev=null;speechSynthesis&&speechSynthesis.cancel();if(st.account)ready()};
+$('#nvnew').onclick=()=>{st.prev=null;hush();if(st.account)ready()};
 
 /* ---- Messages ---- */
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function md(t){/* small, safe markdown: escape first, then bold/italic/links/lists/paragraphs */
+function md(t){/* small, safe markdown: escape first, then bold/italic/links/lists/tables/paragraphs */
   const inl=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|[^*])\*([^*\n]+)\*/g,'$1<i>$2</i>')
     .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/`([^`]+)`/g,'<code>$1</code>');
-  let h='',list=null;
-  for(const raw of t.split('\n')){const l=raw.trim(),ul=l.match(/^[-*•]\s+(.*)/),ol=l.match(/^\d+[.)]\s+(.*)/),hd=l.match(/^#{1,4}\s+(.*)/);
+  const cells=l=>l.replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+  let h='',list=null,tbl=null;
+  const flushT=()=>{if(!tbl)return;const [head,...body]=tbl;
+    h+='<div class="tw"><table><thead><tr>'+cells(head).map(c=>`<th>${inl(c)}</th>`).join('')+'</tr></thead><tbody>'+
+      body.filter(r=>!/^\|?\s*:?-{2,}/.test(r)).map(r=>'<tr>'+cells(r).map(c=>`<td>${inl(c)}</td>`).join('')+'</tr>').join('')+'</tbody></table></div>';tbl=null};
+  for(const raw of t.split('\n')){const l=raw.trim(),ul=l.match(/^[-*•]\s+(.*)/),ol=l.match(/^\d+[.)]\s+(.*)/),hd=l.match(/^#{1,4}\s+(.*)/),row=/^\|.*\|$/.test(l);
     const kind=ul?'ul':ol?'ol':null;
     if(list&&kind!==list){h+=`</${list}>`;list=null}
-    if(kind){if(!list){h+=`<${kind}>`;list=kind}h+=`<li>${inl((ul||ol)[1])}</li>`}
+    if(!row)flushT();
+    if(row)(tbl=tbl||[]).push(l);
+    else if(kind){if(!list){h+=`<${kind}>`;list=kind}h+=`<li>${inl((ul||ol)[1])}</li>`}
     else if(hd)h+=`<p><b>${inl(hd[1])}</b></p>`;else if(l)h+=`<p>${inl(l)}</p>`}
-  return h+(list?`</${list}>`:'')}
-function add(who,text){const d=document.createElement('div');d.className='m '+who;if(who==='a')d.innerHTML=md(text);else d.textContent=text;log.append(d);log.scrollTop=log.scrollHeight;return d}
+  flushT();return h+(list?`</${list}>`:'')}
+function add(who,text){const d=document.createElement('div');d.className='m '+who;if(/\ba\b/.test(who))d.innerHTML=md(text);else d.textContent=text;log.append(d);log.scrollTop=log.scrollHeight;return d}
 function sys(t,cls='sys'){const d=add(cls,'');d.textContent=t}
 
 /* ---- Talk to the Foundry agent (Responses protocol, chained by previous_response_id) ---- */
-async function post(body){const r=await fetch(CFG.endpoint,{method:'POST',headers:{'Authorization':'Bearer '+await token(),'Content-Type':'application/json'},body:JSON.stringify(body)});
+async function post(body){const r=await fetch(CFG.endpoint,{method:'POST',headers:{'Authorization':'Bearer '+await token(CFG.scopes),'Content-Type':'application/json'},body:JSON.stringify(body)});
   const txt=await r.text();let d;try{d=JSON.parse(txt)}catch(e){throw new Error('HTTP '+r.status)}
   if(!r.ok||d.error)throw new Error((d.error&&d.error.message)||('HTTP '+r.status));return d}
 const textOf=d=>(d.output||[]).filter(o=>o.type==='message').flatMap(o=>o.content||[]).map(c=>c.text||'').join('\n').trim();
+async function ask(q,voice){let d=await post({input:(voice?CFG.voiceNote:'')+q,...(st.prev?{previous_response_id:st.prev}:{})});
+  /* The agent's mail tool asks for approval; this page always declines it. */
+  for(let n=0;n<3;n++){const ap=(d.output||[]).filter(o=>o.type==='mcp_approval_request');if(!ap.length)break;
+    d=await post({previous_response_id:d.id,input:ap.map(a=>({type:'mcp_approval_response',approval_request_id:a.id,approve:false}))})}
+  st.prev=d.id;return textOf(d)||'Sorry, I didn’t get a reply from the agent.'}
 async function send(q){q=(q||'').trim();if(!q||st.busy)return;st.busy=true;$('#nvchips').innerHTML='';inp.value='';fit();
-  add('u',q);const wait=add('a','');wait.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';
-  try{let d=await post({input:q,...(st.prev?{previous_response_id:st.prev}:{})});
-    /* The agent's mail tool asks for approval; this public page always declines it. */
-    for(let n=0;n<3;n++){const ap=(d.output||[]).filter(o=>o.type==='mcp_approval_request');if(!ap.length)break;
-      d=await post({previous_response_id:d.id,input:ap.map(a=>({type:'mcp_approval_response',approval_request_id:a.id,approve:false}))})}
-    st.prev=d.id;const a=textOf(d)||'(No text reply from the agent.)';wait.innerHTML=md(a);log.scrollTop=log.scrollHeight;speak(a)}
-  catch(e){wait.remove();sys('NOVA couldn’t answer: '+e.message,'err');if(st.call)setTimeout(listen,800)}
+  add('u',q);const wait=add('a','');wait.innerHTML='<span class="nv-dots"><i></i><i></i><i></i></span>';
+  try{const a=await ask(q,false);wait.innerHTML=md(a);log.scrollTop=log.scrollHeight;if(st.read)speak(a)}
+  catch(e){wait.remove();sys('NOVA couldn’t answer: '+e.message,'err')}
   finally{st.busy=false}}
 $('#nvsend').onclick=()=>send(inp.value);
 inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send(inp.value)}});
 const fit=()=>{inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,120)+'px'};inp.addEventListener('input',fit);
 
-/* ---- Voice: browser speech recognition in, speech synthesis out ---- */
+/* ---- Voice out: Azure neural voice (same voices as Foundry), browser voice as fallback ---- */
+const player=new Audio();let speechOK=true,saySeq=0;
+const plain=t=>t.split('\n').filter(l=>!/^\s*\|/.test(l)).join('\n').replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/\(?https?:\/\/\S+\)?/g,'')
+  .replace(/[*_#`>]/g,'').replace(/\p{Extended_Pictographic}|️|‍/gu,'').replace(/\n+/g,'. ').replace(/\s+/g,' ').replace(/([:;,.!?])\s*\.(?=\s|$)/g,'$1').trim();
+const xml=s=>s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&apos;','"':'&quot;'}[c]));
+function hush(){saySeq++;player.pause();player.removeAttribute('src');window.speechSynthesis&&speechSynthesis.cancel()}
+async function speak(t,onStart){hush();const my=saySeq,text=plain(t);if(!text)return;
+  if(speechOK){try{
+    const r=await fetch(CFG.tts,{method:'POST',headers:{'Authorization':'Bearer '+await token(CFG.speechScopes),'Content-Type':'application/ssml+xml','X-Microsoft-OutputFormat':'audio-24khz-96kbitrate-mono-mp3'},
+      body:`<speak version="1.0" xml:lang="en-US"><voice name="${CFG.voice}"><prosody rate="+4%">${xml(text)}</prosody></voice></speak>`});
+    if(!r.ok)throw new Error('TTS '+r.status);const url=URL.createObjectURL(await r.blob());if(my!==saySeq)return;
+    player.src=url;await player.play();onStart&&onStart();
+    await new Promise(res=>{player.onended=player.onpause=res});URL.revokeObjectURL(url);return}
+  catch(e){if(my!==saySeq)return;console.warn('Azure voice unavailable, using browser voice',e);speechOK=false}}
+  await browserSay(text,my,onStart)}
+function browserSay(text,my,onStart){return new Promise(res=>{if(!window.speechSynthesis)return res();
+  const vs=speechSynthesis.getVoices().filter(x=>/^en/i.test(x.lang)),v=vs.find(x=>/Natural/.test(x.name))||vs.find(x=>/Google UK English Female|Samantha|Karen/.test(x.name))||vs[0];
+  /* Chrome stops long utterances, so speak sentence by sentence. */
+  const parts=text.match(/[^.!?]+[.!?]*/g)||[text];let i=0,started=false;
+  const next=()=>{if(my!==saySeq||i>=parts.length)return res();const u=new SpeechSynthesisUtterance(parts[i++].trim());if(v)u.voice=v;
+    u.onstart=()=>{if(!started){started=true;onStart&&onStart()}};u.onend=u.onerror=next;speechSynthesis.speak(u)};next()})}
+function readLbl(){$('#nvread').textContent=st.read?'🔊 Read aloud: on':'🔈 Read aloud: off';try{localStorage.setItem('nv-read',st.read?'on':'off')}catch(e){}}
+$('#nvread').onclick=()=>{st.read=!st.read;if(!st.read)hush();readLbl()};readLbl();
+
+/* ---- Voice in: browser speech recognition ---- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null;
-function voice(){const v=speechSynthesis.getVoices(),en=v.filter(x=>/^en/i.test(x.lang));
-  return en.find(x=>/Natural/.test(x.name)&&/Aria|Jenny|Emma|Ava|Sonia|Libby/.test(x.name))||en.find(x=>/Natural/.test(x.name))||en.find(x=>/Google UK English Female|Samantha|Karen|Serena/.test(x.name))||en[0]}
-speechSynthesis&&speechSynthesis.getVoices();
-const plain=t=>t.replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/https?:\/\/\S+/g,'').replace(/[*_#`>]/g,'').replace(/\p{Extended_Pictographic}|️/gu,'').replace(/\n+/g,'. ').replace(/\s+/g,' ').trim();
-function speak(t){if(!st.voice||!window.speechSynthesis){if(st.call)listen();return}
-  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(plain(t)),v=voice();if(v)u.voice=v;u.rate=1.04;
-  const av=$('#nvav'),nv=$('#nova');
-  u.onstart=()=>{av.classList.add('talk');nv&&nv.classList.add('blink')};
-  u.onboundary=()=>{nv&&nv.classList.toggle('blink')};
-  u.onend=u.onerror=()=>{av.classList.remove('talk');nv&&nv.classList.remove('blink');if(st.call)setTimeout(listen,250)};
-  speechSynthesis.speak(u)}
-function listen(){if(!SR||st.listening||st.busy)return;
-  rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=1;let fin='';
-  rec.onstart=()=>{st.listening=true;$('#nvmic').classList.add('on');inp.placeholder='Listening…'};
-  rec.onresult=e=>{let s='';fin='';for(const r of e.results){r.isFinal?fin+=r[0].transcript:s+=r[0].transcript}inp.value=(fin+s).trim();fit()};
-  rec.onerror=e=>{if(e.error==='not-allowed'){sys('Microphone blocked. Allow mic access in the browser to use voice.','err');stopCall()}};
-  rec.onend=()=>{st.listening=false;$('#nvmic').classList.remove('on');inp.placeholder='Ask NOVA anything…';
-    const q=(fin||inp.value).trim();if(q)send(q);else if(st.call)setTimeout(listen,300)};
-  try{rec.start()}catch(e){}}
-$('#nvmic').onclick=()=>{speechSynthesis.cancel();if(st.listening){rec&&rec.stop()}else listen()};
-function stopCall(){st.call=false;const b=$('#nvcall');b.classList.remove('on');b.innerHTML='📞 Start voice call <em>hands-free</em>';if(rec&&st.listening)rec.abort()}
-$('#nvcall').onclick=()=>{if(st.call){stopCall();speechSynthesis.cancel();return}
-  st.call=true;const b=$('#nvcall');b.classList.add('on');b.innerHTML='☎️ On a call with NOVA <em>tap to hang up</em>';
-  if(!st.voice){st.voice=true;mute()}speak("I'm listening. Go ahead.")};
-function mute(){$('#nvmute').textContent=st.voice?'🔊 Voice on':'🔇 Voice off';try{localStorage.setItem('nv-voice',st.voice?'on':'off')}catch(e){}}
-$('#nvmute').onclick=()=>{st.voice=!st.voice;if(!st.voice)speechSynthesis.cancel();mute()};mute();
+function hear(onText,onPartial){if(!SR||st.listening)return false;
+  rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=1;let fin='',part='';
+  rec.onstart=()=>{st.listening=true};
+  rec.onresult=e=>{fin='';part='';for(const r of e.results){r.isFinal?fin+=r[0].transcript:part+=r[0].transcript}onPartial&&onPartial((fin+part).trim())};
+  rec.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){st.micBlocked=true}};
+  rec.onend=()=>{st.listening=false;onText((fin||part).trim())};
+  try{rec.start();return true}catch(e){return false}}
+$('#nvmic').onclick=()=>{hush();if(st.listening){rec&&rec.stop();return}
+  $('#nvmic').classList.add('on');inp.placeholder='Listening…';
+  hear(q=>{$('#nvmic').classList.remove('on');inp.placeholder='Ask NOVA anything…';if(q)send(q)},p=>{inp.value=p;fit()})};
+
+/* ---- One-on-one voice call: listen → think → speak → listen ---- */
+let tick=null,t0=0;
+const setS=(s,label)=>{call.dataset.s=s;$('#nvstate').textContent=label};
+const cap=(you,nova)=>{const c=$('#nvcap');c.innerHTML='';if(you){const y=document.createElement('span');y.className='nv-you';y.textContent='You: '+you;c.append(y)}if(nova)c.append(document.createTextNode(nova))};
+async function startCall(){
+  /* Unlock audio inside the click so replies can play later. */
+  player.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';player.play().catch(()=>{});
+  call.hidden=false;st.inCall=true;st.micOn=true;$('#nvcmic').classList.remove('off');setS('thinking','Connecting…');cap('','');
+  t0=Date.now();clearInterval(tick);tick=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);$('#nvtime').textContent=String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},500);
+  $('#nvend').focus();
+  if(!SR){setS('idle','Voice isn’t supported here');cap('','Please open this page in Microsoft Edge or Google Chrome to talk with NOVA.');return}
+  await boot();
+  if(!st.account){setS('idle','Sign in first');cap('','Sign in with your Microsoft work account, then start the call again.');
+    const b=document.createElement('button');b.className='nv-launch';b.style.marginTop='14px';b.textContent='Sign in with Microsoft';b.onclick=async()=>{await signIn();if(st.account)startCall()};$('#nvcap').append(document.createElement('br'),b);return}
+  try{await token(CFG.speechScopes)}catch(e){speechOK=false}
+  if(!st.inCall)return;
+  await novaSays("Hi, I'm NOVA. I'm listening, go ahead.");listen()}
+async function novaSays(t){if(!st.inCall)return;setS('speaking','Speaking…');cap('',plain(t));await speak(t);}
+function listen(){if(!st.inCall)return;if(!st.micOn){setS('idle','Microphone muted');return}
+  setS('listening','Listening…');
+  hear(async q=>{if(!st.inCall)return;
+    if(st.micBlocked){setS('idle','Microphone blocked');cap('','Allow microphone access in the browser’s address bar, then start the call again.');return}
+    if(!q){setTimeout(listen,200);return}
+    setS('thinking','Thinking…');cap(q,'');add('u v',q);
+    try{const a=await ask(q,true);if(!st.inCall)return;add('a v',a);setS('speaking','Speaking…');cap(q,plain(a));await speak(a)}
+    catch(e){if(!st.inCall)return;cap(q,'Sorry, I couldn’t reach the agent: '+e.message);await new Promise(r=>setTimeout(r,1500))}
+    listen()},p=>{if(st.inCall)cap(p,'')})}
+function endCall(){st.inCall=false;clearInterval(tick);hush();if(rec&&st.listening)rec.abort();call.hidden=true;setS('idle','')}
+$('#nvcall').onclick=startCall;$('#nvend').onclick=endCall;
+/* Tap NOVA: stop talking and listen now. */
+$('#nvorb').onclick=()=>{if(!st.inCall)return;if(call.dataset.s==='speaking'){hush()}else if(call.dataset.s!=='listening'&&st.micOn&&!st.busy)listen()};
+$('#nvcmic').onclick=()=>{st.micOn=!st.micOn;$('#nvcmic').classList.toggle('off',!st.micOn);$('#nvcmic').textContent=st.micOn?'🎙️':'🔇';
+  if(!st.micOn){if(rec&&st.listening)rec.abort();setS('idle','Microphone muted')}else if(call.dataset.s!=='speaking'&&call.dataset.s!=='thinking')listen()};
 })();
 </script>
 <!-- ===== /NOVA live agent ===== -->
